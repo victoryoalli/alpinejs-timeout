@@ -1,11 +1,16 @@
 const Plugin = function (Alpine) {
-    Alpine.directive('plugin', (el, obj, { evaluateLater, effect, cleanup }) => {
-        let { value, expression, modifiers } = obj;
-        let evaluate = evaluateLater(expression);
+    const timer = function (fn, value) {
+        setTimeout(() => {
+            fn()
+            timer(fn, value)
+        }, value)
+    }
 
-        cleanup(() => observer.disconnect())
+    Alpine.directive('timeout', (el, obj, { evaluateLater, effect, cleanup }) => {
+        let { value, expression, modifiers } = obj
+        let fn = evaluateLater(expression)
+        timer(fn, value)
     })
-    Alpine.magic('magic',() => { return 'magic' })
 }
 
-export default  Plugin
+export default Plugin
